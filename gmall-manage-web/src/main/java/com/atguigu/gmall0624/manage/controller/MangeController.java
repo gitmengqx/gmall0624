@@ -51,14 +51,12 @@ public class MangeController {
     public void saveAttrInfo(@RequestBody BaseAttrInfo baseAttrInfo){
         manageService.saveAttrInfo(baseAttrInfo);
     }
-    // http://localhost:8082/getAttrValueList?attrId=86
+    // http://localhost:8082/getAttrValueList?attrId=86N
     @RequestMapping("getAttrValueList")
     public List<BaseAttrValue> getAttrValueList(String attrId){
         // select * from baseAttrInfo where id = attrId;
-
         BaseAttrInfo baseAttrInfo =  manageService.getAtrrInfo(attrId);
-
         return baseAttrInfo.getAttrValueList();
-        // return manageService.getAttrValueList(attrId);
+        // return manageService.getAttrValueList(attrId);34
     }
 }
