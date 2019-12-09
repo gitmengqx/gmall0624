@@ -1,6 +1,7 @@
 package com.atguigu.gmall0624.bean;
 
 import lombok.Data;
+import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.io.Serializable;
