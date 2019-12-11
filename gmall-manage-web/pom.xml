@@ -40,7 +40,6 @@
 			<artifactId>fastdfs-client-java</artifactId>
 			<version>1.27</version>
 		</dependency>
-
 	</dependencies>
 
 	<build>

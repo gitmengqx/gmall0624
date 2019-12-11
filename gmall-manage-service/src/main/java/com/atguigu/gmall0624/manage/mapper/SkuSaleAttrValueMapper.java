@@ -4,6 +4,7 @@ import com.atguigu.gmall0624.bean.SkuSaleAttrValue;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface SkuSaleAttrValueMapper extends Mapper<SkuSaleAttrValue> {
     /**
@@ -12,4 +13,11 @@ public interface SkuSaleAttrValueMapper extends Mapper<SkuSaleAttrValue> {
      * @return
      */
     List<SkuSaleAttrValue> selectSkuSaleAttrValueListBySpu(String spuId);
+
+    /**
+     * 根据spuId 查询map 集合
+     * @param spuId
+     * @return
+     */
+    List<Map> getSaleAttrValuesBySpu(String spuId);
 }
