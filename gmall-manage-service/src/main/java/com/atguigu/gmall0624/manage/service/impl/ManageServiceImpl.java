@@ -392,6 +392,11 @@ public class ManageServiceImpl implements ManageService {
         skuImage.setSkuId(skuId);
         List<SkuImage> skuImageList = skuImageMapper.select(skuImage);
         skuInfo.setSkuImageList(skuImageList);
+        // 没有查询平台属性集合
+        SkuAttrValue skuAttrValue = new SkuAttrValue();
+        skuAttrValue.setSkuId(skuId);
+        skuInfo.setSkuAttrValueList(skuAttrValueMapper.select(skuAttrValue));
+
         return skuInfo;
     }
 
@@ -426,6 +431,32 @@ public class ManageServiceImpl implements ManageService {
             }
         }
         return returnMap;
+    }
+
+    @Override
+    public List<BaseAttrInfo> getAttrList(List<String> attrValueIdList) {
+        /*
+            SELECT * FROM base_attr_info bai INNER JOIN base_attr_value bav ON bai.id=bav.attr_id
+                WHERE bav.id IN (171,81,120,167,82,83);
+             两种方式：
+                一种：attrValueIdList 变成字符串 171,81,120,167,82,83
+                二种：使用mybatis 的动态sql <foreach> </foreach>
+                <select id="selectPostIn" resultType="domain.blog.Post">
+                  SELECT *
+                  FROM POST P
+                  WHERE ID in
+                  <foreach item="item" index="index" collection="attrValueIdList"
+                      open="(" separator="," close=")">
+                        #{item}
+                  </foreach>
+                </select>
+         */
+        // attrValueIdList 将其转换为字符串
+        String attrValueIds  = StringUtils.join(attrValueIdList.toArray(), ",");
+
+        System.out.println(attrValueIds); // 171,81,120,167,82,83 ...
+        return baseAttrInfoMapper.selectAttrInfoListByIds(attrValueIds);
+
     }
 
     // 判断集合是否为空！

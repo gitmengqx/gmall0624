@@ -2,11 +2,12 @@ package com.atguigu.gmall0624.manage.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
 import com.atguigu.gmall0624.bean.SkuInfo;
+import com.atguigu.gmall0624.bean.SkuLsInfo;
 import com.atguigu.gmall0624.bean.SpuImage;
 import com.atguigu.gmall0624.bean.SpuSaleAttr;
+import com.atguigu.gmall0624.service.ListService;
 import com.atguigu.gmall0624.service.ManageService;
-import lombok.extern.log4j.Log4j;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,6 +18,9 @@ public class SkuManageController {
 
     @Reference
     private ManageService manageService;
+
+    @Reference
+    private ListService listService;
 
     // http://localhost:8082/spuImageList?spuId=60
     @RequestMapping("spuImageList")
@@ -34,6 +38,20 @@ public class SkuManageController {
     @RequestMapping("saveSkuInfo")
     public void saveSkuInfo(@RequestBody SkuInfo skuInfo){
         manageService.saveSkuInfo(skuInfo);
+        // 提交审核流程 {商品上架的申请}
+    }
+    // 单个上传 http://localhost:8082/onSale?skuId=38
+    // 批量上传 http://localhost:8082/onSale?skuIds=38,39,40,41
+    // springmvc  第一种方式：/  第二种 *.do | *.action
+    @RequestMapping("onSale")
+    public void onSale(String skuId){
+        SkuLsInfo skuLsInfo = new SkuLsInfo();
+        // 给skuLsInfo 赋值 skuLsInfo的属性与skuInfo 属性一致！
+        SkuInfo skuInfo = manageService.getSkuInfo(skuId);
+        // spring下BeanUtils
+        BeanUtils.copyProperties(skuInfo,skuLsInfo);
+        // 调用上传服务
+        listService.saveSkuLsInfo(skuLsInfo);
     }
 
 }
